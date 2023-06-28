@@ -3,8 +3,18 @@ services:
     image: postgres
     volumes:
       - ./tmp/db:/var/lib/postgresql/data
-    environment:
-      POSTGRES_PASSWORD: password
+    env_file:
+      - .env
+    ports:
+      - 5432:5432
+  pgadmin:
+    image: dpage/pgadmin4
+    env_file:
+      - .env
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
   rails:
     build: .
     tty: true
@@ -12,19 +22,21 @@ services:
     command: sh -c "./docker-scripts/rails.sh"
     # command: sh -c "rm -f tmp/pids/server.pid && bin/rails server -p 3000 -b 0.0.0.0"
     volumes:
-      - .:/docker-rails7-esbuild-tailwind-pgsql
+      - .:/wot_app
     ports:
       - 3000:3000
     depends_on:
       - db
-  # js_css:
-  #   build: .
-  #   container_name: js_css
-  #   restart: unless-stopped
-  #   tty: true
-  #   command: sh -c "yarn build:css --watch && yarn build --watch"
-  #   volumes:
-  #     - .:/crm7
-  #   depends_on:
-  #     - db
-  #     - rails
+    env_file:
+      - .env
+  js_css:
+    build: .
+    container_name: js_css
+    restart: unless-stopped
+    tty: true
+    command: sh -c "yarn install && yarn run css:watch"
+    volumes:
+      - .:/crm7
+    depends_on:
+      - db
+      - rails

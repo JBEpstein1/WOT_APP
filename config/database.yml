@@ -19,14 +19,14 @@ default: &default
   encoding: unicode
   host: db
   username: postgres
-  password: password
+  password: <%= ENV['pg_pw'] %>
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 development:
   <<: *default
-  database: docker_rails7_esbuild_tailwind_pgsql_development
+  database: wot_app_pgsql_development
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -60,7 +60,7 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: docker_rails7_esbuild_tailwind_pgsql_test
+  database: wot_app_pgsql_test
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -84,6 +84,6 @@ test:
 #
 production:
   <<: *default
-  database: docker_rails7_esbuild_tailwind_pgsql_production
-  username: docker_rails7_esbuild_tailwind_pgsql
-  password: <%= ENV["DOCKER_RAILS7_ESBUILD_TAILWIND_PGSQL_DATABASE_PASSWORD"] %>
+  database: wot_app_pgsql_production
+  username: postgres
+  password: <%= ENV['pg_pw'] %>

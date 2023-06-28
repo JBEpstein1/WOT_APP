@@ -13,9 +13,18 @@ RUN curl -sL https://deb.nodesource.com/setup_19.x | bash -\
 RUN yarn add esbuild
 RUN yarn add sass
 
-WORKDIR /docker-rails7-esbuild-tailwind-pgsql
-COPY Gemfile /docker-rails7-esbuild-tailwind-pgsql/Gemfile
-COPY Gemfile.lock /docker-rails7-esbuild-tailwind-pgsql/Gemfile.lock
+# Install Tailwind CSS, PostCSS, Autoprefixer, postcss-cli and purgecss
+RUN yarn add tailwindcss postcss autoprefixer postcss-cli @fullhuman/postcss-purgecss
+
+WORKDIR /wot_app
+COPY Gemfile /wot_app/Gemfile
+COPY Gemfile.lock /wot_app/Gemfile.lock
+
+# Copy all source files
+COPY . .
+
+# Build CSS with PostCSS and Tailwind CSS
+RUN npx postcss ./app/javascript/stylesheets/application.tailwind.css -o ./app/assets/stylesheets/application.css
 
 EXPOSE 3000
 

@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  account_id: 1
+  name: MyString
+  previous_clan: one
+  left_at: 2023-06-28 01:20:16
+
+two:
+  account_id: 1
+  name: MyString
+  previous_clan: two
+  left_at: 2023-06-28 01:20:16
